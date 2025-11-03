@@ -1,58 +1,47 @@
+// === Element References ===
 const searchBtn = document.getElementById("searchBtn");
 const searchInput = document.getElementById("searchInput");
 const resultsDiv = document.getElementById("results");
 const modal = document.getElementById("modal");
 const addBtn = document.getElementById("addBtn");
-const closeModal = document.getElementById("closeModal");
-const submitAdd = document.getElementById("submitAdd");
+const closeModalBtn = document.getElementById("closeModal");
+const submitAddBtn = document.getElementById("submitAdd");
 
+// === Search Handler ===
 searchBtn.onclick = () => {
   const q = searchInput.value.trim();
   if (!q) {
-    alert("Please enter a search term.");
+    alert("Please enter a term to search.");
     return;
   }
-  fetch(`/search?q=${q}`)
-    .then(res => res.json())
-    .then(data => {
-      displayResults(data);
+
+  resultsDiv.innerHTML = `<p class="loading">🔍 Searching the abyss...</p>`;
+
+  fetch(`/search?q=${encodeURIComponent(q)}`)
+    .then((res) => {
+      if (!res.ok) throw new Error("Server error during search");
+      return res.json();
     })
-    .catch(() => {
-      alert("Failed to retrieve search results.");
+    .then((data) => {
+      if (data.error) throw new Error(data.error);
+      displayResults(data.database);
+    })
+    .catch((err) => {
+      console.error("Search error:", err);
+      resultsDiv.innerHTML = `<p class="error">❌ Error: ${err.message}</p>`;
     });
 };
 
-addBtn.onclick = () => modal.style.display = "flex";
-closeModal.onclick = () => modal.style.display = "none";
+// === Display Search Results ===
+function displayResults(results) {
+  resultsDiv.innerHTML = `<h3>Search Results:</h3>`;
 
-submitAdd.onclick = () => {
-  const name = document.getElementById("nameInput").value;
-  const url = document.getElementById("urlInput").value;
-  const description = document.getElementById("descInput").value;
-
-  if (!name || !url || !description || !url.endsWith('.onion')) {
-    alert("Please fill all fields correctly with a valid .onion URL.");
+  if (!results || results.length === 0) {
+    resultsDiv.innerHTML += `<p class="no-results">No entries found in your abyss...</p>`;
     return;
   }
 
-  fetch("/add", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, url, description })
-  })
-  .then(res => res.json())
-  .then(msg => alert(msg.message || msg.error))
-  .catch(() => alert("Failed to submit."));
-
-  modal.style.display = "none";
-};
-
-function displayResults({ database, external }) {
-  resultsDiv.innerHTML = "<h3>Local Database Results:</h3>";
-  if (database.length === 0) {
-    resultsDiv.innerHTML += "<p>No entries found.</p>";
-  }
-  database.forEach(item => {
+  results.forEach((item) => {
     resultsDiv.innerHTML += `
       <div class="result-item">
         <strong>${item.name}</strong><br>
@@ -60,16 +49,46 @@ function displayResults({ database, external }) {
         <p>${item.description}</p>
       </div>`;
   });
-
-  if (external && external.length > 0) {
-    resultsDiv.innerHTML += "<h3>External Search Results:</h3>";
-    external.forEach(item => {
-      resultsDiv.innerHTML += `
-        <div class="result-item">
-          <strong>${item.title || "External Result"}</strong><br>
-          <a href="${item.link}" target="_blank">${item.link}</a><br>
-          <p>${item.snippet || ""}</p>
-        </div>`;
-    });
-  }
 }
+
+// === Modal Handlers ===
+addBtn.onclick = () => (modal.style.display = "flex");
+closeModalBtn.onclick = () => (modal.style.display = "none");
+window.onclick = (e) => {
+  if (e.target === modal) modal.style.display = "none";
+};
+
+// === Submit New Onion URL ===
+submitAddBtn.onclick = () => {
+  const name = document.getElementById("nameInput").value.trim();
+  const url = document.getElementById("urlInput").value.trim();
+  const description = document.getElementById("descInput").value.trim();
+
+  if (!name || !url || !description) {
+    alert("Please fill out all fields.");
+    return;
+  }
+  if (!url.endsWith(".onion")) {
+    alert("URL must end with a valid .onion address.");
+    return;
+  }
+
+  fetch("/add", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, url, description }),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Failed to add new entry.");
+      return res.json();
+    })
+    .then((msg) => {
+      alert(msg.message || "Onion URL added!");
+      modal.style.display = "none";
+      searchInput.value = ""; // Clear search
+    })
+    .catch((err) => {
+      console.error("Submit error:", err);
+      alert("Error: " + err.message);
+    });
+};
