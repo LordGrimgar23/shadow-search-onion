@@ -1,0 +1,135 @@
+/* General Styles */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: black;
+  color: #c5b3ff;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+#app {
+  margin-top: 60px;
+  flex: 1;
+}
+
+h1 {
+  color: #9e55ff;
+  font-size: 3rem;
+  text-shadow: 0 0 20px #6a0dad, 0 0 5px #4a007d;
+  margin-bottom: 5px;
+}
+
+.tagline {
+  margin-top: -10px;
+  font-style: italic;
+  color: #5556ff;
+}
+
+input, textarea {
+  width: 300px;
+  padding: 10px;
+  margin: 10px auto;
+  background: #1a1a2e;
+  border: 1px solid #6a0dad;
+  color: #d7c6ff;
+  outline: none;
+  border-radius: 6px;
+  box-shadow: 0 0 8px #6a0dad;
+}
+
+input:focus, textarea:focus {
+  border-color: #9e55ff;
+  box-shadow: 0 0 12px #9e55ff;
+}
+
+button {
+  padding: 10px 20px;
+  background: #6a0dad;
+  color: #fff;
+  margin: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 0 10px #6a0dad;
+  font-weight: bold;
+}
+
+button:hover {
+  background: #8e00ff;
+  transform: scale(1.05);
+}
+
+/* Search Results */
+#results {
+  margin-top: 30px;
+  width: 85%;
+  max-width: 1000px;
+  margin-inline: auto;
+  text-align: left;
+  overflow-y: auto;
+  max-height: 60vh;
+  padding-bottom: 100px;
+}
+
+.result-item {
+  background: #1a1a2e;
+  border: 1px solid #6a0dad;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 6px;
+  box-shadow: 0 0 12px #4b0082;
+}
+
+a {
+  color: #8a4fff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Modal */
+#modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s;
+}
+
+.modal-content {
+  background: #2f2f3d;
+  padding: 20px;
+  border-radius: 6px;
+  width: 300px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 0 20px #8a4fff;
+}
+
+/* Footer trademark */
+#trademark {
+  font-size: 0.85rem;
+  color: #8d63ff;
+  opacity: 0.8;
+  text-shadow: 0 0 8px #4b0082;
+  margin-bottom: 10px;
+}
+
+#trademark p {
+  margin: 0;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
