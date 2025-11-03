@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🜂 Shadow Search Onion</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <h1>🜂 Shadow Search Onion</h1>
+    <p class="tagline">Search from the abyss...</p>
+    <input type="text" id="searchInput" placeholder="Search for onions...">
+    <button id="searchBtn">Search</button>
+    <button id="addBtn">+ Add New URL</button>
+
+    <div id="results"></div>
+
+    <!-- Add URL Modal -->
+    <div id="modal">
+      <div class="modal-content">
+        <h2>Add Onion URL</h2>
+        <input id="nameInput" placeholder="Name">
+        <input id="urlInput" placeholder="URL (.onion)">
+        <textarea id="descInput" placeholder="Description..."></textarea>
+        <button id="submitAdd">Submit</button>
+        <button id="closeModal">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trademark Footer -->
+  <footer id="trademark">
+    <p>🜂 Shadow Search Onion™ — Created by HitBoy | All Rights Reserved</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
